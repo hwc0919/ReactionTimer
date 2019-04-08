@@ -3,6 +3,9 @@
 # author: Nitro Melon
 #
 # change log:
+# version 0.2.1 2019.4.8
+#    show guide and about in messagebox
+#
 # version 0.2.0 2019.4.8
 #    add multiple hints
 #    improve click event logic and add cheat prompt
@@ -23,7 +26,7 @@ If the status bar shows 'click screen ONCE to start', it's the right time to sta
 
 ABOUT = '''A simple and crude reaction time tester.\n\
 author: NitroMelon\n\
-version: 0.2.0 2019.4.8'''
+version: 0.2.1 2019.4.8'''
 
 
 class ReactionTimer(object):
@@ -63,9 +66,7 @@ class ReactionTimer(object):
         self.color = color
     
     def show_text(self, text):
-        new_window = Toplevel()
-        content = Label(new_window, text=text)
-        content.pack()
+        tkinter.messagebox.showinfo(message=text, title=str(text).lower())
         
     def on_click(self, e):
         if self.state == 0:
