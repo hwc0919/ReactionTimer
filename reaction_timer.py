@@ -3,6 +3,11 @@
 # author: Nitro Melon
 #
 # change log:
+# version 0.2.2 2019.4.8
+#    edit guide and info messagebox
+#    add icon
+#    remove menu tearoff
+#
 # version 0.2.1 2019.4.8
 #    show guide and about in messagebox
 #
@@ -21,12 +26,11 @@ import tkinter.messagebox
 
 
 GUIDE = '''Click to start, wait for image and click to react.\n\
-Don't click multiple times at once!!!\n\
-If the status bar shows 'click screen ONCE to start', it's the right time to start.'''
+Don't click multiple times at once!!!'''
 
 ABOUT = '''A simple and crude reaction time tester.\n\
 author: NitroMelon\n\
-version: 0.2.1 2019.4.8'''
+version: 0.2.2 2019.4.8'''
 
 
 class ReactionTimer(object):
@@ -35,6 +39,7 @@ class ReactionTimer(object):
         # main
         self.master = master
         self.master.title('Reaction Timer')
+        self.master.iconbitmap('x:/projects/reaction_timer/xiguapig.ico')
         self.master.geometry('+800+400')
         self.master.resizable(0, 0)
         self.canvas = Canvas(master, width=200, height=100)
@@ -47,16 +52,16 @@ class ReactionTimer(object):
         # menu bar
         menu = Menu(master)
         master.config(menu=menu)
-        colormenu = Menu(menu)
+        colormenu = Menu(menu, tearoff=0)
         menu.add_cascade(label='color', menu=colormenu)
         colormenu.add_command(label='blue', command=lambda: self.set_color('blue'))
         colormenu.add_command(label='red', command=lambda: self.set_color('red'))
         colormenu.add_command(label='green', command=lambda: self.set_color('green'))
         
-        guidemenu = Menu(menu)
+        guidemenu = Menu(menu, tearoff=0)
         menu.add_cascade(label='info', menu=guidemenu)
-        guidemenu.add_command(label='guide', command=lambda: self.show_text(GUIDE))
-        guidemenu.add_command(label='about', command=lambda: self.show_text(ABOUT))
+        guidemenu.add_command(label='guide', command=lambda: self.show_text('guide'))
+        guidemenu.add_command(label='about', command=lambda: self.show_text('about'))
         
         # status bar
         self.status = Label(master, text='click screen ONCE to start', bd=1, relief=SUNKEN, anchor=W)
@@ -66,7 +71,10 @@ class ReactionTimer(object):
         self.color = color
     
     def show_text(self, text):
-        tkinter.messagebox.showinfo(message=text, title=str(text).lower())
+        if text == 'guide':
+            tkinter.messagebox.showinfo(message=GUIDE, title='guide')
+        elif text == 'about':
+            tkinter.messagebox.showinfo(message=ABOUT, title='about')
         
     def on_click(self, e):
         if self.state == 0:
