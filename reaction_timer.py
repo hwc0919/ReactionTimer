@@ -3,6 +3,8 @@
 # author: Nitro Melon
 #
 # change log:
+# version 0.2.3 2019.4.9
+#    fix a bug when cheating
 # version 0.2.2 2019.4.8
 #    edit guide and info messagebox
 #    add icon
@@ -30,7 +32,7 @@ Don't click multiple times at once!!!'''
 
 ABOUT = '''A simple and crude reaction time tester.\n\
 author: NitroMelon\n\
-version: 0.2.2 2019.4.8'''
+version: 0.2.3 2019.4.9'''
 
 
 class ReactionTimer(object):
@@ -84,14 +86,15 @@ class ReactionTimer(object):
         elif self.state == 1:
             self.state = -1
             tkinter.messagebox.showinfo(message='Don\'t cheat!', title='warning')
+            self.canvas.delete(ALL)
             self.status.config(text='click screen ONCE to start')
             self.state = 0
         elif self.state == 2:
             self.end()
 
     def start(self):
-        self.status.config(text='click when the image appears')
         self.state = 1
+        self.status.config(text='click when the image appears')
         wait_time = 1.5 + 2.5 * random.random()
         for i in range(int(wait_time * 10)):
             if self.state == 1:
@@ -100,9 +103,10 @@ class ReactionTimer(object):
                 return
 
         # canvas
-        self.r = self.canvas.create_rectangle(50, 25, 150, 75, fill=self.color, outline=self.color)  
-        self.tstart = time.time()
-        self.state = 2
+        if self.state == 1:
+            self.r = self.canvas.create_rectangle(50, 25, 150, 75, fill=self.color, outline=self.color)  
+            self.tstart = time.time()
+            self.state = 2
 
     def end(self):
         self.tend = time.time()
