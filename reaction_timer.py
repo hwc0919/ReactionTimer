@@ -3,8 +3,12 @@
 # author: Nitro Melon
 #
 # change log:
+# version 0.2.4 2019.4.10
+#    fix icon loading problem
+#
 # version 0.2.3 2019.4.9
 #    fix a bug when cheating
+#
 # version 0.2.2 2019.4.8
 #    edit guide and info messagebox
 #    add icon
@@ -20,11 +24,16 @@
 # version 0.1.0 2019.4.8
 
 
-from tkinter import *
+import base64
+import os
+import random
 import threading
 import time
-import random
+
+from tkinter import *
 import tkinter.messagebox
+
+from icon import img
 
 
 GUIDE = '''Click to start, wait for image and click to react.\n\
@@ -32,7 +41,8 @@ Don't click multiple times at once!!!'''
 
 ABOUT = '''A simple and crude reaction time tester.\n\
 author: NitroMelon\n\
-version: 0.2.3 2019.4.9'''
+version: 0.2.4 2019.4.9'''
+
 
 
 class ReactionTimer(object):
@@ -41,7 +51,6 @@ class ReactionTimer(object):
         # main
         self.master = master
         self.master.title('Reaction Timer')
-        self.master.iconbitmap('x:/projects/reaction_timer/xiguapig.ico')
         self.master.geometry('+800+400')
         self.master.resizable(0, 0)
         self.canvas = Canvas(master, width=200, height=100)
@@ -119,5 +128,11 @@ class ReactionTimer(object):
 
 if __name__ == '__main__':
     root = Tk()
+    # bind icon
+    with open('tmp.ico', 'wb') as tmp:
+        tmp.write(base64.b64decode(img))
+    root.iconbitmap('tmp.ico')
+    os.remove('tmp.ico')
+    
     timer = ReactionTimer(root)
     root.mainloop()
